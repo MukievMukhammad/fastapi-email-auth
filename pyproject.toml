@@ -1,0 +1,80 @@
+[project]
+name = "fastapi-email-auth"
+version = "0.1.0"
+description = "Email-based passwordless authentication for FastAPI"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Mukhammad", email = "42972450+MukievMukhammad@users.noreply.github.com" }
+]
+keywords = ["fastapi", "authentication", "email", "passwordless", "magic-link", "otp"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Framework :: FastAPI",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "fastapi>=0.118.0",
+    "pydantic>=2.11.0",
+    "python-jose[cryptography]>=3.5.0",
+    "redis>=6.4.0",
+    "aiosmtplib>=4.0.2",
+    "email-validator>=2.3.0",
+    "mnemonic>=0.21",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.2.0",
+    "black>=25.9.0",
+    "ruff>=0.13.0",
+    "mypy>=1.18.0",
+    "pytest-cov>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/MukievMukhammad/fastapi-email-auth"
+Repository = "https://github.com/MukievMukhammad/fastapi-email-auth"
+Issues = "https://github.com/MukievMukhammad/fastapi-email-auth/issues"
+Documentation = "https://github.com/MukievMukhammad/fastapi-email-auth#readme"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastapi_email_auth"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["fastapi_email_auth"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--cov=fastapi_email_auth --cov-report=term-missing"

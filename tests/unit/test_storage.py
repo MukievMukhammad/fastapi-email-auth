@@ -99,7 +99,7 @@ async def test_rate_limit():
     email = "test@example.com"
 
     # First request should be allowed
-    assert await storage.check_rate_limit(email)
+    assert await storage.check_rate_limit(email) == True
 
     # Immediate second request should be rate limited
-    assert await storage.check_rate_limit(email)
+    assert await storage.check_rate_limit(email) == False

@@ -119,20 +119,25 @@ class InMemoryCodeStorage(CodeStorage):
 
 
 class InMemoryUserStorage(UserStorage):
-    """In-memory user storage implementation for testing
-
-    Stores basic user information in memory. In production, replace with
-    database-backed implementation (PostgreSQL, MongoDB, etc.).
-    """
+    """In-memory user storage implementation for testing"""
 
     def __init__(self):
         # Store user data: {email: user_dict}
         self.users: Dict[str, dict] = {}
 
+    async def get_user(self, email: str) -> dict | None:
+        """Get user by email without creating
+
+        Args:
+            email: User's email address
+
+        Returns:
+            User data if exists, None otherwise
+        """
+        return self.users.get(email)
+
     async def get_or_create_user(self, email: str) -> dict:
         """Get existing user or create new one
-
-        If user doesn't exist, creates a new user record with creation timestamp.
 
         Args:
             email: User's email address

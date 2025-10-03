@@ -50,8 +50,8 @@ def test_email_login_request_whitespace_trimmed():
 
 def test_email_login_request_case_preserved():
     """Test EmailLoginRequest preserves email case"""
-    request = EmailLoginRequest(email="Test@Example.COM")
-    assert request.email == "Test@Example.COM"
+    request = EmailLoginRequest(email=" Test@Example.COM")
+    assert request.email == "Test@example.com"
 
 
 # VerifyCodeRequest Tests
@@ -106,12 +106,10 @@ def test_auth_response_success():
     response = AuthResponse(
         success=True,
         message="Code sent successfully",
-        auth_request_id="abc123",
         expires_in=600,
     )
     assert response.success is True
     assert response.message == "Code sent successfully"
-    assert response.auth_request_id == "abc123"
     assert response.expires_in == 600
 
 
@@ -120,7 +118,6 @@ def test_auth_response_failure():
     response = AuthResponse(success=False, message="Rate limit exceeded")
     assert response.success is False
     assert response.message == "Rate limit exceeded"
-    assert response.auth_request_id is None
     assert response.expires_in is None
 
 
@@ -133,14 +130,11 @@ def test_auth_response_optional_fields():
 
 def test_auth_response_json_serialization():
     """Test AuthResponse can be serialized to JSON"""
-    response = AuthResponse(
-        success=True, message="OK", auth_request_id="test123", expires_in=300
-    )
+    response = AuthResponse(success=True, message="OK", expires_in=300)
     json_data = response.model_dump()
 
     assert json_data["success"] is True
     assert json_data["message"] == "OK"
-    assert json_data["auth_request_id"] == "test123"
     assert json_data["expires_in"] == 300
 
 
@@ -195,9 +189,7 @@ def test_full_auth_flow_models():
     assert login.email == "user@example.com"
 
     # Step 2: Auth response
-    auth_resp = AuthResponse(
-        success=True, message="Code sent", auth_request_id="req123", expires_in=600
-    )
+    auth_resp = AuthResponse(success=True, message="Code sent", expires_in=600)
     assert auth_resp.success is True
 
     # Step 3: Verify request

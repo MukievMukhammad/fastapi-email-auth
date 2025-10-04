@@ -9,14 +9,14 @@ Passwordless email authentication for FastAPI using BIP-39 mnemonic verification
 
 ## ✨ Features
 
-- 🔐 **Passwordless authentication** - Users receive verification codes via email
-- 🌍 **Multi-language support** - BIP-39 codes in 9 languages (English, Russian, Chinese, etc.)
-- 🎯 **Easy to use** - Works out of the box with minimal configuration
-- ⚡ **Async/await** - Fully asynchronous for high performance
-- 🔄 **Pluggable storage** - In-memory, Redis, PostgreSQL, or custom implementations
-- 🛡️ **Security first** - Rate limiting, attempt tracking, JWT tokens
-- 📦 **Type-safe** - Full Pydantic validation
-- 🧪 **Well tested** - 100% test coverage
+- **Passwordless authentication** - Users receive verification codes via email
+- **Multi-language support** - BIP-39 codes in 9 languages (English, Russian, Chinese, etc.)
+- **Easy to use** - Works out of the box with minimal configuration
+- **Async/await** - Fully asynchronous for high performance
+- **Pluggable storage** - In-memory, Redis, PostgreSQL, or custom implementations
+- **Security first** - Rate limiting, attempt tracking, JWT tokens
+- **Type-safe** - Full Pydantic validation
+- **Well tested** - 100% test coverage
 
 ## 📦 Installation
 
@@ -569,8 +569,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💬 Support
 
-- 📧 Email: bronze_58_radar@icloud.com
-- 🐛 Issues: [GitHub Issues](https://github.com/MukievMukhammad/fastapi-email-auth/issues)
+- Email: bronze_58_radar@icloud.com
+- Issues: [GitHub Issues](https://github.com/MukievMukhammad/fastapi-email-auth/issues)
 
 ---
 

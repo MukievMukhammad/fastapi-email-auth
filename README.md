@@ -1,11 +1,28 @@
 
-# FastAPI Email Auth 📧🔐 (Beta)
+# FastAPI Email Auth 📧🔐 (Alpha)
 
 Passwordless email authentication for FastAPI using BIP-39 mnemonic verification codes. Simple, secure, and production-ready.
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.118+-00a393.svg)](https://fastapi.tiangolo.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## ⚠️ Alpha Version
+
+This package is in early development (v0.1.0-alpha).
+
+**What works:**
+- ✅ Email code sending and verification
+- ✅ JWT authentication
+- ✅ In-memory storage
+- ✅ Redis storage for codes
+
+**What's coming:**
+- 🚧 PostgreSQL user storage
+- 🚧 More comprehensive tests
+- 🚧 Production battle-tested
+
+**Not recommended for production yet!**
 
 ## ✨ Features
 

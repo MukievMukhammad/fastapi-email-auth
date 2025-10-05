@@ -74,7 +74,6 @@ class AuthResponse(BaseModel):
     Attributes:
         success: Whether operation was successful
         message: Human-readable status message
-        auth_request_id: Unique identifier for this auth request (optional)
         expires_in: Code validity duration in seconds (optional)
     """
 
@@ -94,7 +93,6 @@ class AuthResponse(BaseModel):
                 {
                     "success": True,
                     "message": "Code sent successfully",
-                    "auth_request_id": "abc123",
                     "expires_in": 600,
                 },
                 {"success": False, "message": "Rate limit exceeded"},

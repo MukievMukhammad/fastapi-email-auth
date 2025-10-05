@@ -29,6 +29,7 @@ __all__ = [
     # Dependencies
     "get_auth_service",
     "get_current_user",
+    "set_custom_service",
     # Utilities
     "BIP39Generator",
     "generate_code",

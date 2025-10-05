@@ -13,7 +13,12 @@ class RedisCodeStorage(CodeStorage):
     Stores verification codes with automatic expiration using Redis TTL.
     """
 
-    def __init__(self, redis_url: str, key_prefix: str = "email_auth:"):
+    def __init__(
+        self,
+        redis_url: str,
+        key_prefix: str = "email_auth:",
+        rate_limit_window: int = 60,
+    ):
         """Initialize Redis storage
 
         Args:
@@ -22,6 +27,7 @@ class RedisCodeStorage(CodeStorage):
         """
         self.redis = redis.from_url(redis_url, decode_responses=True)
         self.prefix = key_prefix
+        self.rate_limit_window = rate_limit_window
 
     def _code_key(self, email: str) -> str:
         """Generate Redis key for code"""
@@ -76,8 +82,7 @@ class RedisCodeStorage(CodeStorage):
         exists = await self.redis.exists(key)
 
         if not exists:
-            # Set rate limit for 60 seconds
-            await self.redis.setex(key, 60, "1")
+            await self.redis.setex(key, self.rate_limit_window, "1")
             return True
 
         return False

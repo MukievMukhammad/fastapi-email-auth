@@ -12,7 +12,7 @@ class InMemoryCodeStorage(CodeStorage):
     Not recommended for production use with multiple server instances.
     """
 
-    def __init__(self):
+    def __init__(self, rate_limit_window: int = 60):
         # Store codes with expiration time: {email: (code, expiry_datetime)}
         self.codes: Dict[str, tuple[str, datetime]] = {}
 
@@ -21,6 +21,7 @@ class InMemoryCodeStorage(CodeStorage):
 
         # Rate limiting timestamps: {email: next_allowed_request_time}
         self.rate_limits: Dict[str, datetime] = {}
+        self.rate_limit_window = rate_limit_window
 
     async def save_code(self, email: str, code: str, ttl: int) -> None:
         """Save verification code with automatic expiration
@@ -111,7 +112,9 @@ class InMemoryCodeStorage(CodeStorage):
         """
         if email not in self.rate_limits:
             # First request - allow and set rate limit
-            self.rate_limits[email] = datetime.now(timezone.utc) + timedelta(minutes=1)
+            self.rate_limits[email] = datetime.now(timezone.utc) + timedelta(
+                minutes=self.rate_limit_window
+            )
             return True
 
         # Check if rate limit period has passed

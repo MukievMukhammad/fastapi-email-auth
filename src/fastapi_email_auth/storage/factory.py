@@ -18,13 +18,15 @@ def create_code_storage(settings: EmailAuthSettings) -> CodeStorage:
         from .redis import RedisCodeStorage
 
         return RedisCodeStorage(
-            redis_url=settings.redis_url, key_prefix=settings.redis_key_prefix
+            redis_url=settings.redis_url,
+            key_prefix=settings.redis_key_prefix,
+            rate_limit_window=settings.rate_limit_window,
         )
     else:
         # Fallback to in-memory
         from .memory import InMemoryCodeStorage
 
-        return InMemoryCodeStorage()
+        return InMemoryCodeStorage(rate_limit_window=settings.rate_limit_window)
 
 
 def create_user_storage(settings: EmailAuthSettings) -> UserStorage:

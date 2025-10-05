@@ -27,6 +27,8 @@ class EmailAuthService:
         smtp_user: str,
         smtp_password: str,
         jwt_secret: str,
+        use_tls: bool = False,
+        start_tls: bool = False,
         jwt_algorithm: str = "HS256",
         word_count: int = 2,
         code_language: Language = "english",
@@ -67,7 +69,8 @@ class EmailAuthService:
             "port": smtp_port,
             "username": smtp_user,
             "password": smtp_password,
-            "use_tls": True,
+            "use_tls": use_tls,
+            "start_tls": start_tls,
         }
 
         self.jwt_secret = jwt_secret
@@ -285,4 +288,20 @@ If you did not request this code, please ignore this email.
         message.attach(MIMEText(html, "html"))
 
         # Send email
-        await aiosmtplib.send(message, **self.smtp_config)
+        # not work with no ssl/tls mail services such as mailchatter
+        # TODO: it is better to make it work with aiosmtplib.send
+        # await aiosmtplib.send(message, **self.smtp_config)
+        smtp_client = aiosmtplib.SMTP(**self.smtp_config)
+
+        try:
+            await smtp_client.connect()
+
+            # Authenticate if credentials provided
+            if self.smtp_config.get("username") and self.smtp_config.get("password"):
+                await smtp_client.login(
+                    self.smtp_config["username"], self.smtp_config["password"]
+                )
+
+            await smtp_client.send_message(message)
+        finally:
+            await smtp_client.quit()

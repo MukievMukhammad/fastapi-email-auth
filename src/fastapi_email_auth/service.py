@@ -67,10 +67,13 @@ class EmailAuthService:
         self.smtp_config = {
             "hostname": smtp_host,
             "port": smtp_port,
-            "username": smtp_user,
-            "password": smtp_password,
             "use_tls": use_tls,
             "start_tls": start_tls,
+        }
+
+        self.smtp_auth = {
+            "username": smtp_user,
+            "password": smtp_password,
         }
 
         self.jwt_secret = jwt_secret
@@ -297,9 +300,9 @@ If you did not request this code, please ignore this email.
             await smtp_client.connect()
 
             # Authenticate if credentials provided
-            if self.smtp_config.get("username") and self.smtp_config.get("password"):
+            if self.smtp_auth.get("username") and self.smtp_auth.get("password"):
                 await smtp_client.login(
-                    self.smtp_config["username"], self.smtp_config["password"]
+                    self.smtp_auth["username"], self.smtp_auth["password"]
                 )
 
             await smtp_client.send_message(message)

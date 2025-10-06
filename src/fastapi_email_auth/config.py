@@ -24,6 +24,10 @@ class EmailAuthSettings(BaseSettings):
         default=None, description="From email address (defaults to smtp_user)"
     )
 
+    allow_register_new_users: bool = Field(
+        default=True, description="Allow create new user if not exists"
+    )
+
     # JWT Configuration
     jwt_secret: str = Field(
         default="change-this-secret-key", description="Secret key for JWT token signing"

@@ -2,7 +2,8 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from .dependencies import get_auth_service, get_current_user
+from .config import EmailAuthSettings
+from .dependencies import get_auth_service, get_current_user, get_settings
 from .models import AuthResponse, EmailLoginRequest, TokenResponse, VerifyCodeRequest
 from .service import EmailAuthService
 
@@ -63,10 +64,12 @@ async def send_verification_code(
     response_model=TokenResponse,
     status_code=status.HTTP_200_OK,
     summary="Verify code and get token",
-    description="Verifies the code and returns a JWT access token",
+    description="Verifies the code, creates user account if doesn't exists and returns a JWT access token",
 )
 async def verify_code(
-    request: VerifyCodeRequest, service: EmailAuthService = Depends(get_auth_service)
+    request: VerifyCodeRequest,
+    service: EmailAuthService = Depends(get_auth_service),
+    settings: EmailAuthSettings = Depends(get_settings),
 ) -> TokenResponse:
     """Verify code and generate JWT token
 
@@ -86,7 +89,7 @@ async def verify_code(
         token = await service.verify_code(
             request.email,
             request.code,
-            auto_create_user=False,  # Explicitly set to False
+            auto_create_user=settings.allow_register_new_users,  # Explicitly set to False
         )
 
         return TokenResponse(access_token=token)
@@ -98,52 +101,6 @@ async def verify_code(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Verification failed: {str(e)}",
-        )
-
-
-@router.post(
-    "/register-and-verify",
-    response_model=TokenResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Register new user and verify code",
-    description="Verifies code and creates user account if doesn't exist",
-)
-async def register_and_verify(
-    request: VerifyCodeRequest, service: EmailAuthService = Depends(get_auth_service)
-) -> TokenResponse:
-    """Verify code and auto-create user if needed
-
-    This endpoint is for user registration flow where new users
-    are automatically created during verification.
-
-    Args:
-        request: Verification request with email and code
-        service: Authentication service instance
-
-    Returns:
-        TokenResponse with JWT access token
-
-    Raises:
-        HTTPException: 400 if code is invalid
-        HTTPException: 500 if token generation fails
-    """
-    try:
-        # Auto-create user if doesn't exist
-        token = await service.verify_code(
-            request.email,
-            request.code,
-            auto_create_user=True,  # Allow user creation
-        )
-
-        return TokenResponse(access_token=token)
-
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Registration failed: {str(e)}",
         )
 
 

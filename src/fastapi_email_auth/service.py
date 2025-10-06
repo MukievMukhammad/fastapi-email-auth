@@ -251,7 +251,7 @@ class EmailAuthService:
         """
         message = MIMEMultipart("alternative")
         message["Subject"] = "Verification Code"
-        message["From"] = self.smtp_config["username"]
+        message["From"] = self.smtp_auth["username"]
         message["To"] = email
 
         # Plain text version

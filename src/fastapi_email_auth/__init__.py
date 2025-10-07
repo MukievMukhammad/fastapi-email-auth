@@ -6,7 +6,7 @@ Passwordless authentication via email verification codes.
 
 __version__ = "0.1.0"
 
-from .dependencies import get_auth_service, get_current_user
+from .dependencies import get_auth_service, get_current_user, set_custom_service
 from .models import (
     AuthResponse,
     EmailLoginRequest,
@@ -16,6 +16,7 @@ from .models import (
 from .routes import router
 from .service import EmailAuthService
 from .storage.factory import create_code_storage
+from .storage.redis import RedisCodeStorage
 from .utils.bip39 import BIP39Generator, generate_code, validate_code
 
 __all__ = [
@@ -31,6 +32,8 @@ __all__ = [
     "get_auth_service",
     "get_current_user",
     "set_custom_service",
+    # Storages
+    "RedisCodeStorage",
     # Utilities
     "create_code_storage",
     "BIP39Generator",

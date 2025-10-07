@@ -18,7 +18,9 @@ router = APIRouter(tags=["authentication"])
     description="Sends a verification code to the provided email address",
 )
 async def send_verification_code(
-    request: EmailLoginRequest, service: EmailAuthService = Depends(get_auth_service)
+    request: EmailLoginRequest,
+    service: EmailAuthService = Depends(get_auth_service),
+    settings: EmailAuthSettings = Depends(get_settings),
 ) -> AuthResponse:
     """Send verification code to user's email
 
@@ -37,7 +39,10 @@ async def send_verification_code(
         result = await service.send_verification_code(request.email)
 
         return AuthResponse(
-            success=True, message="Code sent to email", expires_in=result["expires_in"]
+            success=True,
+            message="Code sent to email",
+            expires_in=result["expires_in"],
+            retry_in=settings.rate_limit_window,
         )
 
     except ValueError as e:

@@ -86,6 +86,9 @@ class AuthResponse(BaseModel):
     expires_in: Optional[int] = Field(
         None, description="Code expiration time in seconds", examples=[600]
     )
+    retry_in: Optional[int] = Field(
+        60, description="Resend code after seconds", examples=[600]
+    )
 
     model_config = {
         "json_schema_extra": {

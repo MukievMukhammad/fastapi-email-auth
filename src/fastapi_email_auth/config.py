@@ -76,6 +76,8 @@ class EmailAuthSettings(BaseSettings):
         "env_prefix": "EMAIL_AUTH_",
         "env_file": ".env",
         "case_sensitive": False,
+        "extra": "ignore",
+        "env_ignore_empty": True,
     }
 
     @property
